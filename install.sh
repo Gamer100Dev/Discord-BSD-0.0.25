@@ -1,5 +1,5 @@
 #!/bin/sh
-printf "Discord 0.0.19\n"
+printf "Discord 0.0.25\n"
 printf "Discord desktop client based on Discord Web for FreeBSD\n"
 install() {
 	printf "Installing...\n"
@@ -13,6 +13,6 @@ install() {
 	sed -i '' "s/Icon=auto2/Icon=\/home\/$USER\/.local\/share\/discord-bsd\/discord.png/" ~/.local/share/applications/discord.desktop
 	cd /home/$USER/.local/share/discord-bsd
 	npm install
-	printf "Discord 0.0.19 installed!\n"
+	printf "Discord 0.0.25 installed!\n"
 }
 printf "Launching installer...\n" && install
