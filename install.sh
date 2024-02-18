@@ -7,7 +7,7 @@ install() {
 	mkdir -p ~/.local/share/discord-bsd
 	mkdir -p ~/.local/bin
 	mkdir -p ~/.local/share/applications
-	cp -rv ./* ~/.local/share/discord-bsd
+	cp -rv .* ~/.local/share/discord-bsd
 	mv -v ~/.local/share/discord-bsd/discord.desktop ~/.local/share/applications/
 	mv -v ~/.local/share/discord-bsd/discord ~/.local/bin
 	sed -i '' "s/Exec=auto1/Exec=\/home\/$USER\/.local\/bin\/discord/" ~/.local/share/applications/discord.desktop
