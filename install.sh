@@ -15,5 +15,8 @@ install() {
 	cd /home/$USER/.local/share/discord-bsd
 	npm install
 	printf "Discord 0.0.25 installed!\n"
+        printf "\n Setting executable perms!"
+	chmod +x ~/.local/bin/discord
+        printf("Discord is ready to launch and use! Thank you for using this port!")
 }
 printf "Launching installer...\n" && install
