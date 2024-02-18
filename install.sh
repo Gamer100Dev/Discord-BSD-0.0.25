@@ -7,6 +7,10 @@ printf "\nDo not run this in root! Or else this script breaks and will replicate
 install() {
     printf "Installing...\n"
     SCRIPT_DIR="$(dirname "$0")"
+    SCRIPTS_DIR="$SCRIPT_DIR/Scripts"
+    cd "$SCRIPTS_DIR" || exit
+
+    g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
     INSTALL_DIR="$HOME/.local"
 
     mkdir -p "$INSTALL_DIR/share/discord-bsd"
@@ -22,7 +26,6 @@ install() {
 
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
-    g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
     printf "Discord 0.0.25 installed!\n"
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
