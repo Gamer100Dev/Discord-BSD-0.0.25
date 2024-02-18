@@ -22,7 +22,7 @@ install() {
 
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
-
+    g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
     printf "Discord 0.0.25 installed!\n"
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
