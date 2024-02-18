@@ -15,6 +15,7 @@ install() {
 
     mkdir -p "$INSTALL_DIR/share/discord-bsd"
     mkdir -p "$INSTALL_DIR/share/discord-bsd/Scripts"
+    printf "\nMade Scripts! \n"
     mkdir -p "$INSTALL_DIR/bin"
     mkdir -p "$INSTALL_DIR/share/applications"
 
