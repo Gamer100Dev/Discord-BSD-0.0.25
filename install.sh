@@ -6,18 +6,19 @@ printf "\nDo not run this in root! Or else this script breaks and will replicate
 
 install() {
     printf "Installing...\n"
+    
     SCRIPT_DIR="$(dirname "$0")"
     SCRIPTS_DIR="$SCRIPT_DIR/Scripts"
-    cd "$SCRIPTS_DIR" || exit
+    cd "$SCRIPTS_DIR"
 
     g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
-    wait  # Wait for the compilation to finish
-
     INSTALL_DIR="$HOME/.local"
 
     mkdir -p "$INSTALL_DIR/share/discord-bsd"
     mkdir -p "$INSTALL_DIR/bin"
     mkdir -p "$INSTALL_DIR/share/applications"
+
+    shopt -s extglob  # Enable extended globbing
 
     # Copy all files excluding unwanted ones
     cp -rv !("SharedFunctions.h"|"SharedFunctions.cpp"|"MainScript.cpp") "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
@@ -30,6 +31,7 @@ install() {
 
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
+
     printf "Discord 0.0.25 installed!\n"
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
