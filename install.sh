@@ -4,7 +4,28 @@ printf "Discord 0.0.25\n"
 printf "Discord desktop client based on Discord Web for FreeBSD\n"
 printf "\nDo not run this in root! Or else this script breaks and will replicate your current chdir! It will not install under root!\n"
 
+check_rsync() {
+    if command -v rsync >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_rsync() {
+    printf "rsync is not installed. Do you want to install it? (y/n): "
+    read -r response
+    if [ "$response" = "y" ]; then
+        sudo pkg install -y rsync
+    else
+        printf "rsync is required for this script. Please install it manually and run the script again.\n"
+        exit 1
+    fi
+}
+
 install() {
+    check_rsync || install_rsync
+
     printf "Installing...\n"
     
     SCRIPT_DIR="$(dirname "$0")"
@@ -18,10 +39,8 @@ install() {
     mkdir -p "$INSTALL_DIR/bin"
     mkdir -p "$INSTALL_DIR/share/applications"
 
-    shopt -s extglob  # Enable extended globbing
-
-    # Copy all files excluding unwanted ones
-    cp -rv !("SharedFunctions.h"|"SharedFunctions.cpp"|"MainScript.cpp") "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
+    # Copy using rsync with exclusion
+    rsync -av --exclude='SharedFunctions.h' --exclude='SharedFunctions.cpp' --exclude='MainScript.cpp' "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd/"
 
     mv -v "$INSTALL_DIR/share/discord-bsd/discord.desktop" "$INSTALL_DIR/share/applications/"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord" "$INSTALL_DIR/bin"
