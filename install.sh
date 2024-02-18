@@ -7,21 +7,19 @@ printf "\nDo not run this in root! Or else this script breaks and will replicate
 install() {
     printf "Installing...\n"
     SCRIPT_DIR="$(dirname "$0")"
-    SCRIPTS_DIR="$SCRIPT_DIR/Scripts"
-    cd "$SCRIPTS_DIR" || exit
-
+    cd "$SCRIPT_DIR"
     g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
     INSTALL_DIR="$HOME/.local"
 
     mkdir -p "$INSTALL_DIR/share/discord-bsd"
-    mkdir -p "$INSTALL_DIR/share/discord-bsd/Scripts"
     mkdir -p "$INSTALL_DIR/bin"
     mkdir -p "$INSTALL_DIR/share/applications"
 
-    cp -rv "$SCRIPT_DIR"/* "$INSTALL_DIR/share/discord-bsd"
+    find . -maxdepth 1 -type f -exec cp -v {} "$INSTALL_DIR/share/discord-bsd" \;
+
     mv -v "$INSTALL_DIR/share/discord-bsd/discord.desktop" "$INSTALL_DIR/share/applications/"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord" "$INSTALL_DIR/bin"
-    mv -v "$SCRIPTS_DIR/DownloadHandler" "$INSTALL_DIR/share/discord-bsd/Scripts"
+
     sed -i '' "s|Exec=auto1|Exec=$HOME/.local/bin/discord|" "$INSTALL_DIR/share/applications/discord.desktop"
     sed -i '' "s|Icon=auto2|Icon=$HOME/.local/share/discord-bsd/discord.png|" "$INSTALL_DIR/share/applications/discord.desktop"
 
