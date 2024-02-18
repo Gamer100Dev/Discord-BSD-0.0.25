@@ -1,6 +1,7 @@
 #!/bin/sh
 printf "Discord 0.0.25\n"
 printf "Discord desktop client based on Discord Web for FreeBSD\n"
+printf "\n Do not run this in root! Or else this script breaks and will replicate your current chdir! It will not install under root!\n"
 install() {
 	printf "Installing...\n"
 	mkdir -p ~/.local/share/discord-bsd
