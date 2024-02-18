@@ -14,13 +14,14 @@ install() {
     INSTALL_DIR="$HOME/.local"
 
     mkdir -p "$INSTALL_DIR/share/discord-bsd"
+    mkdir -p "$INSTALL_DIR/share/discord-bsd/Scripts"
     mkdir -p "$INSTALL_DIR/bin"
     mkdir -p "$INSTALL_DIR/share/applications"
 
     cp -rv "$SCRIPT_DIR"/* "$INSTALL_DIR/share/discord-bsd"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord.desktop" "$INSTALL_DIR/share/applications/"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord" "$INSTALL_DIR/bin"
-
+    mv -r "$INSTALL_DIR/share/discord-bsd/DownloadHandler" "$INSTALL_DIR/share/discord-bsd/Scripts"
     sed -i '' "s|Exec=auto1|Exec=$HOME/.local/bin/discord|" "$INSTALL_DIR/share/applications/discord.desktop"
     sed -i '' "s|Icon=auto2|Icon=$HOME/.local/share/discord-bsd/discord.png|" "$INSTALL_DIR/share/applications/discord.desktop"
 
