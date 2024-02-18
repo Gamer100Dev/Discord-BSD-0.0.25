@@ -20,7 +20,7 @@ install() {
     mkdir -p "$INSTALL_DIR/share/applications"
 
     # Copy all files excluding unwanted ones
-    rsync -av --exclude='SharedFunctions.h' --exclude='SharedFunctions.cpp' --exclude='MainScript.cpp' "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
+    cp -rv !("SharedFunctions.h"|"SharedFunctions.cpp"|"MainScript.cpp") "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
 
     mv -v "$INSTALL_DIR/share/discord-bsd/discord.desktop" "$INSTALL_DIR/share/applications/"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord" "$INSTALL_DIR/bin"
