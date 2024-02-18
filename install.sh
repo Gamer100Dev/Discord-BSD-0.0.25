@@ -17,6 +17,6 @@ install() {
 	printf "Discord 0.0.25 installed!\n"
         printf "\n Setting executable perms!"
 	chmod +x ~/.local/bin/discord
-        printf("\n Discord is ready to launch and use! Thank you for using this port!")
+        printf "\n Discord is ready to launch and use! Thank you for using this port!"
 }
 printf "Launching installer...\n" && install
