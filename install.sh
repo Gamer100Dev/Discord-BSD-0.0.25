@@ -10,6 +10,7 @@ install() {
     SCRIPTS_DIR="$SCRIPT_DIR/Scripts"
     cd "$SCRIPTS_DIR" || exit
     g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
+    wait
     INSTALL_DIR="$HOME/.local"
 
     mkdir -p "$INSTALL_DIR/share/discord-bsd"
@@ -40,6 +41,7 @@ install() {
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
     printf "\nDiscord is ready to launch and use! Thank you for using this port! \n"
+    wait
     rm -r "$SCRIPT_DIR"
 }
 
