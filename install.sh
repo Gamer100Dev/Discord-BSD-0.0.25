@@ -33,7 +33,6 @@ install() {
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
     printf "\nLOG: Cleanup!\n"
-    rm -r "$SCRIPT_DIR"
     rm -r "$INSTALL_DIR/share/discord-bsd/Scripts/MainScript.cpp"
     rm -r "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.cpp"
     rm -r "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.h"
@@ -41,6 +40,7 @@ install() {
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
     printf "\nDiscord is ready to launch and use! Thank you for using this port! \n"
+    rm -r "$SCRIPT_DIR"
 }
 
 printf "Launching installer...\n" && install
