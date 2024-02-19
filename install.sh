@@ -42,7 +42,7 @@ install() {
     chmod +x "$INSTALL_DIR/bin/discord"
     printf "\nDiscord is ready to launch and use! Thank you for using this port! \n"
     wait
-    rm -r "$SCRIPT_DIR"
+    rm -rf "$SCRIPT_DIR"
 }
 
 printf "Launching installer...\n" && install
