@@ -11,7 +11,7 @@ printf "\nDo not run this in root! Or else this script breaks and will replicate
 # Check for required commands
 check_command "rsync"
 check_command "npm"
-check_command "electron25"
+check_command "electron@2.0.18"
 
 install() {
     printf "Installing...\n"
@@ -43,15 +43,15 @@ install() {
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
     printf "\nLOG: Cleanup!\n"
-    sudo rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/MainScript.cpp"
-    sudo rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.cpp"
-    sudo rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.h"
+    rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/MainScript.cpp"
+    rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.cpp"
+    rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.h"
     printf "Discord 0.0.25 installed!\n"
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
     printf "\nDiscord is ready to launch and use! Thank you for using this port! \n"
     wait
-    sudo rm -rf "$SCRIPT_DIR"
+    rm -rf "$SCRIPT_DIR"
 }
 
 printf "Launching installer...\n" && install
