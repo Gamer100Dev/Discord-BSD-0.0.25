@@ -91,35 +91,33 @@ function createMainWindow() {
 function executeUpdateScript() {
     const downloadHandlerScriptPath = path.join(__dirname, 'Scripts', 'DownloadHandler');
 
-    const childProcess = exec(`chmod +x ${downloadHandlerScriptPath} && ${downloadHandlerScriptPath}`);
+    const childProcess = exec(`chmod +x ${downloadHandlerScriptPath} && ${downloadHandlerScriptPath}`, (err, stdout, stderr) => {
+        if (err) {
+            console.error(`Error executing DownloadHandler script: ${err}`);
+            mainWindow.webContents.send('update-failed');
+            return;
+        }
 
-    let isSameVersion = false;
+        console.log(`DownloadHandler script stdout: ${stdout}`);
+        console.error(`DownloadHandler script stderr: ${stderr}`);
 
-    childProcess.stdout.on('data', (data) => {
-        if (data.includes('The versions are the same.')) {
+        let isSameVersion = false;
+
+        if (stdout.includes('The versions are the same.')) {
             isSameVersion = true;
         }
-    });
 
-    childProcess.stderr.on('data', (data) => {
-        console.error(`DownloadHandler error: ${data}`);
-        if (!data.includes('The versions are the same.')) {
-            isSameVersion = false
-            console.log("Launching updater! Watch the console!")
-            console.error("There is an update! You may continue to use Discord, you will be alerted when its done!")
+        if (stderr && !stderr.includes('The versions are the same.')) {
+            isSameVersion = false;
+            console.log("Launching updater! Watch the console!");
+            console.error("There is an update! You may continue to use Discord, you will be alerted when it's done!");
         }
-    });
 
-    childProcess.on('close', (code) => {
-        if (code === 0) {
-            if (isSameVersion) {
-                mainWindow.webContents.send('update-same-version');
-            } else {
-                mainWindow.webContents.send('update-successful');
-                console.error("Update is done! You may restart discord!")
-            }
+        if (isSameVersion) {
+            mainWindow.webContents.send('update-same-version');
         } else {
-            mainWindow.webContents.send('update-failed');
+            mainWindow.webContents.send('update-successful');
+            console.error("Update is done! You may restart Discord!");
         }
     });
 }
