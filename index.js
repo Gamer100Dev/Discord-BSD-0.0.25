@@ -1,5 +1,6 @@
-const { app, BrowserWindow, Tray, Menu, shell, nativeImage } = require('electron');
+const { app, BrowserWindow, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
+const { exec } = require('child_process');
 
 let mainWindow = null;
 let bootWindow = null;
@@ -83,10 +84,51 @@ function createMainWindow() {
     return mainWindow;
 }
 
-app.on('ready', () => {
-    createMainWindow();
-    appIcon = new Tray(nativeImage.createFromPath(iconPath));
-    appIcon.setToolTip('Discord');
+function executeUpdateScript() {
+    const downloadHandlerScriptPath = path.join(__dirname, 'Scripts', 'DownloadHandler');
+
+    const childProcess = exec(`chmod +x ${downloadHandlerScriptPath} && ${downloadHandlerScriptPath}`);
+
+    let isSameVersion = false;
+
+    childProcess.stdout.on('data', (data) => {
+        if (data.includes('The versions are the same.')) {
+            isSameVersion = true;
+        }
+    });
+
+    childProcess.stderr.on('data', (data) => {
+        console.error(`DownloadHandler error: ${data}`);
+        if (!data.includes('The versions are the same.')) {
+            isSameVersion = false
+            console.log("Launching updater! Watch the console!")
+            console.error("There is an update! You may continue to use Discord, you will be alerted when its done!")
+        }
+    });
+
+    childProcess.on('close', (code) => {
+        if (code === 0) {
+            if (isSameVersion) {
+                mainWindow.webContents.send('update-same-version');
+            } else {
+                mainWindow.webContents.send('update-successful');
+                console.error("Update is done! You may restart discord!")
+            }
+        } else {
+            mainWindow.webContents.send('update-failed');
+        }
+    });
+}
+app.on('ready', async () => {
+    try {
+        createMainWindow();
+        await executeUpdateScript();
+        appIcon = new Tray(nativeImage.createFromPath(iconPath));
+        appIcon.setToolTip('Discord');
+    } catch (error) {
+        console.error(error);
+        app.quit();
+    }
 });
 
 app.on('window-all-closed', () => {
@@ -94,3 +136,5 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+
+app.on('update-now', executeUpdateScript);
