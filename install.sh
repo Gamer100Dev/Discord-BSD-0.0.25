@@ -16,7 +16,14 @@ install() {
     mkdir -p "$INSTALL_DIR/bin"
     mkdir -p "$INSTALL_DIR/share/applications"
 
-    cp -rv !("SharedFunctions.h"|"SharedFunctions.cpp"|"MainScript.cpp") "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
+    wait
+
+    EXCLUDE_LIST="SharedFunctions.h SharedFunctions.cpp MainScript.cpp"
+
+    mkdir -p "$INSTALL_DIR/share/discord-bsd"
+
+    rsync -av --exclude={"$EXCLUDE_LIST"} "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
+
     mv -v "$INSTALL_DIR/share/discord-bsd/discord.desktop" "$INSTALL_DIR/share/applications/"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord" "$INSTALL_DIR/bin"
 
