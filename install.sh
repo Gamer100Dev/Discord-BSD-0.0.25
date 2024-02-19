@@ -9,22 +9,14 @@ install() {
     SCRIPT_DIR="$(dirname "$0")"
     SCRIPTS_DIR="$SCRIPT_DIR/Scripts"
     cd "$SCRIPTS_DIR" || exit
+    g++ -std=c++20 MainScript.cpp SharedFunctions.cpp -o DownloadHandler -lcurl
+    INSTALL_DIR="$HOME/.local"
 
-    # Check if rsync is installed, if not, install it
-    if ! command -v rsync > /dev/null; then
-        printf "rsync is not installed. Do you want to install it? (y/n): "
-        read -r response
-        if [ "$response" = "y" ]; then
-            sudo pkg install rsync
-        else
-            printf "Installation failed.\n"
-            exit 1
-        fi
-    fi
+    mkdir -p "$INSTALL_DIR/share/discord-bsd"
+    mkdir -p "$INSTALL_DIR/bin"
+    mkdir -p "$INSTALL_DIR/share/applications"
 
-    # Copy using rsync with exclusion
-    rsync -av --exclude='*.cpp' --exclude='*.h' "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd/"
-
+    cp -rv !("SharedFunctions.h"|"SharedFunctions.cpp"|"MainScript.cpp") "$SCRIPT_DIR/" "$INSTALL_DIR/share/discord-bsd"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord.desktop" "$INSTALL_DIR/share/applications/"
     mv -v "$INSTALL_DIR/share/discord-bsd/discord" "$INSTALL_DIR/bin"
 
@@ -33,7 +25,6 @@ install() {
 
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
-
     printf "Discord 0.0.25 installed!\n"
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
