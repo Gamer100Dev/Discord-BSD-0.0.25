@@ -1,8 +1,17 @@
 #!/bin/sh
 
+check_command() {
+    command -v "$1" >/dev/null 2>&1 || { echo >&2 "I require $1 but it's not installed. Do you want to install it? (y/n): "; read -r ans; [ "$ans" = "y" ] && pkg install -y "$1" || exit 1; }
+}
+
 printf "Discord 0.0.25\n"
 printf "Discord desktop client based on Discord Web for FreeBSD\n"
 printf "\nDo not run this in root! Or else this script breaks and will replicate your current chdir! It will not install under root!\n"
+
+# Check for required commands
+check_command "rsync"
+check_command "npm"
+check_command "electron25"
 
 install() {
     printf "Installing...\n"
@@ -34,15 +43,15 @@ install() {
     cd "$INSTALL_DIR/share/discord-bsd" || exit
     npm install
     printf "\nLOG: Cleanup!\n"
-    rm -r "$INSTALL_DIR/share/discord-bsd/Scripts/MainScript.cpp"
-    rm -r "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.cpp"
-    rm -r "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.h"
+    sudo rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/MainScript.cpp"
+    sudo rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.cpp"
+    sudo rm -rf "$INSTALL_DIR/share/discord-bsd/Scripts/SharedFunctions.h"
     printf "Discord 0.0.25 installed!\n"
     printf "\nSetting executable perms!"
     chmod +x "$INSTALL_DIR/bin/discord"
     printf "\nDiscord is ready to launch and use! Thank you for using this port! \n"
     wait
-    rm -rf "$SCRIPT_DIR"
+    sudo rm -rf "$SCRIPT_DIR"
 }
 
 printf "Launching installer...\n" && install
