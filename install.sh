@@ -11,7 +11,7 @@ printf "\nDo not run this in root! Or else this script breaks and will replicate
 # Check for required commands
 check_command "rsync"
 check_command "npm"
-check_command "electron@2.0.18"
+check_command "electron25"
 
 install() {
     printf "Installing...\n"
