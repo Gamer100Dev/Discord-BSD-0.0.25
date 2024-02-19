@@ -61,6 +61,10 @@ function createMainWindow() {
     });
 
     mainWindow.loadURL('https://discord.com/app');
+    mainWindow.webContents.on('new-window', (event, url) => {
+        event.preventDefault();
+        require('electron').shell.openExternal(url);
+    });
     bootWindow = createBootWindow();
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
